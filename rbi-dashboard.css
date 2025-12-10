@@ -1,0 +1,370 @@
+/* ============================================ */
+/* RBI THEME FOR DASHBOARD - PROFESSIONAL UI */
+/* Based on Official RBI Website Colors */
+/* ============================================ */
+
+/* RBI Color Variables */
+:root {
+  --rbi-primary-blue: #003366;
+  --rbi-secondary-blue: #0066CC;
+  --rbi-dark-blue: #002244;
+  --rbi-accent-blue: #1e3a8a;
+  --rbi-gold: #DAA520;
+  --rbi-light-bg: #f8fafc;
+  --rbi-card-bg: #ffffff;
+  --rbi-gray: #6B7280;
+  --rbi-light-gray: #F3F4F6;
+  --rbi-border: #e2e8f0;
+  --rbi-text-primary: #1e293b;
+  --rbi-text-secondary: #64748b;
+  --rbi-green: #10B981;
+  --rbi-red: #dc2626;
+  --rbi-orange: #f97316;
+  --rbi-yellow: #eab308;
+}
+
+/* RBI Background */
+.rbi-dashboard {
+  background: linear-gradient(135deg, var(--rbi-light-bg) 0%, #e8f4f8 50%, var(--rbi-light-bg) 100%);
+  background-attachment: fixed;
+  min-height: 100vh;
+}
+
+/* RBI Professional Card */
+.rbi-card {
+  background: var(--rbi-card-bg);
+  border: 1px solid var(--rbi-border);
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 51, 102, 0.08);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+}
+
+/* Allow datepicker to overflow from filter cards */
+.rbi-card:has(.react-datepicker-wrapper) {
+  overflow: visible;
+  z-index: 5000;
+}
+
+.rbi-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, 
+    var(--rbi-primary-blue) 0%, 
+    var(--rbi-secondary-blue) 50%, 
+    var(--rbi-gold) 100%);
+}
+
+.rbi-card:hover {
+  border-color: var(--rbi-secondary-blue);
+  box-shadow: 0 4px 16px rgba(0, 51, 102, 0.15);
+  transform: translateY(-2px);
+}
+
+/* RBI Icon Box */
+.rbi-icon-box {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, var(--rbi-secondary-blue), var(--rbi-primary-blue));
+  border-radius: 12px;
+  color: white;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 51, 102, 0.15);
+}
+
+.rbi-card:hover .rbi-icon-box {
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(0, 51, 102, 0.25);
+}
+
+/* RBI Text Effect */
+.rbi-text-primary {
+  color: var(--rbi-primary-blue);
+  font-weight: 700;
+}
+
+/* RBI Accent Dot */
+.rbi-dot {
+  background: var(--rbi-gold);
+  box-shadow: 0 0 8px rgba(218, 165, 32, 0.6);
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+@keyframes pulse-glow {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.15);
+    opacity: 0.8;
+  }
+}
+
+/* RBI Primary Button */
+.rbi-btn-primary {
+  background: var(--rbi-primary-blue);
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.875rem;
+  transition: all 0.2s ease;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 51, 102, 0.2);
+}
+
+.rbi-btn-primary:hover {
+  background: var(--rbi-dark-blue);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 51, 102, 0.3);
+}
+
+.rbi-btn-primary:active {
+  transform: translateY(0);
+}
+
+/* RBI Secondary Button */
+.rbi-btn-secondary {
+  background: white;
+  color: var(--rbi-primary-blue);
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.875rem;
+  transition: all 0.2s ease;
+  border: 2px solid var(--rbi-primary-blue);
+  cursor: pointer;
+}
+
+.rbi-btn-secondary:hover {
+  background: var(--rbi-light-gray);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 51, 102, 0.15);
+}
+
+/* RBI Filter Label */
+.rbi-filter-label {
+  display: block;
+  color: var(--rbi-text-secondary);
+  font-size: 0.75rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* RBI Select */
+.rbi-select {
+  width: 100%;
+  padding: 0.625rem 0.75rem;
+  background: white;
+  border: 2px solid var(--rbi-border);
+  border-radius: 8px;
+  color: var(--rbi-text-primary);
+  font-size: 0.875rem;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  outline: none;
+}
+
+.rbi-select:hover {
+  border-color: var(--rbi-secondary-blue);
+}
+
+.rbi-select:focus {
+  border-color: var(--rbi-primary-blue);
+  box-shadow: 0 0 0 3px rgba(0, 51, 102, 0.1);
+}
+
+/* RBI Spinner */
+.rbi-spinner {
+  border: 3px solid var(--rbi-border);
+  border-top: 3px solid var(--rbi-primary-blue);
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+  box-shadow: 0 2px 8px rgba(0, 51, 102, 0.15);
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Custom Scrollbar for RBI Theme */
+.rbi-dashboard ::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.rbi-dashboard ::-webkit-scrollbar-track {
+  background: var(--rbi-light-gray);
+  border-radius: 4px;
+}
+
+.rbi-dashboard ::-webkit-scrollbar-thumb {
+  background: var(--rbi-primary-blue);
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
+.rbi-dashboard ::-webkit-scrollbar-thumb:hover {
+  background: var(--rbi-dark-blue);
+  box-shadow: 0 2px 4px rgba(0, 51, 102, 0.3);
+}
+
+/* Subtle Pattern Background */
+.rbi-dashboard::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    linear-gradient(rgba(0, 51, 102, 0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 51, 102, 0.02) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.rbi-dashboard > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* DatePicker RBI Theme Override */
+.rbi-dashboard .react-datepicker {
+  background-color: white !important;
+  border: 2px solid var(--rbi-border) !important;
+  font-family: inherit !important;
+  box-shadow: 0 4px 16px rgba(0, 51, 102, 0.15) !important;
+  border-radius: 8px !important;
+}
+
+.rbi-dashboard .react-datepicker__header {
+  background-color: var(--rbi-primary-blue) !important;
+  border-bottom: none !important;
+  border-radius: 6px 6px 0 0 !important;
+  padding-top: 12px !important;
+}
+
+.rbi-dashboard .react-datepicker__current-month,
+.rbi-dashboard .react-datepicker__day-name {
+  color: white !important;
+  font-weight: 600 !important;
+}
+
+.rbi-dashboard .react-datepicker__day {
+  color: var(--rbi-text-primary) !important;
+  border-radius: 6px !important;
+  margin: 0.2rem !important;
+}
+
+.rbi-dashboard .react-datepicker__day:hover {
+  background-color: var(--rbi-light-gray) !important;
+  color: var(--rbi-primary-blue) !important;
+}
+
+.rbi-dashboard .react-datepicker__day--selected {
+  background-color: var(--rbi-primary-blue) !important;
+  color: white !important;
+  font-weight: 600 !important;
+}
+
+.rbi-dashboard .react-datepicker__day--keyboard-selected {
+  background-color: var(--rbi-light-gray) !important;
+  color: var(--rbi-primary-blue) !important;
+}
+
+.rbi-dashboard .react-datepicker__triangle {
+  display: none;
+}
+
+.rbi-dashboard .react-datepicker-popper {
+  z-index: 10000 !important;
+}
+
+.rbi-dashboard .react-datepicker-popper[data-placement^="bottom"] {
+  z-index: 10000 !important;
+}
+
+.rbi-dashboard .react-datepicker__portal {
+  z-index: 10000 !important;
+}
+
+.rbi-dashboard .react-datepicker__tab-loop {
+  z-index: 9999 !important;
+  position: relative;
+}
+
+.rbi-dashboard .react-datepicker-wrapper {
+  position: relative;
+  z-index: 5001 !important;
+}
+
+.rbi-dashboard .react-datepicker__input-container {
+  position: relative;
+  z-index: 5001 !important;
+}
+
+.rbi-dashboard .react-datepicker__input-container input {
+  position: relative;
+  z-index: 5001 !important;
+}
+
+.rbi-dashboard .react-datepicker__tab-loop {
+  z-index: 9999 !important;
+  position: relative;
+}
+
+.rbi-dashboard .react-datepicker-wrapper {
+  z-index: auto !important;
+}
+
+.rbi-dashboard .react-datepicker__input-container {
+  z-index: auto !important;
+}
+
+.rbi-dashboard .react-datepicker__navigation-icon::before {
+  border-color: white !important;
+}
+
+.rbi-dashboard .react-datepicker__navigation:hover *::before {
+  border-color: var(--rbi-gold) !important;
+}
+
+/* Badge Colors */
+.rbi-badge-green {
+  background: #D1FAE5;
+  color: #065F46;
+}
+
+.rbi-badge-red {
+  background: #FEE2E2;
+  color: #991B1B;
+}
+
+.rbi-badge-yellow {
+  background: #FEF3C7;
+  color: #92400E;
+}
+
+.rbi-badge-blue {
+  background: #DBEAFE;
+  color: #1E40AF;
+}
