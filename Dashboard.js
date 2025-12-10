@@ -40,15 +40,12 @@ ChartJS.register(
 // --- RBI THEME CONSTANTS ---
 const RBI_COLORS = {
   primary: '#003366',    // RBI Navy Blue
+  secondary: '#005b96',  // Lighter Navy
   accent: '#F39C12',     // Gold/Orange
   success: '#27AE60',    // Professional Green
   danger: '#C0392B',     // Deep Red
-  textDark: '#1a1a1a',
-  textLight: '#ffffff',
-  bgLight: '#f4f6f9',    // Light grey background
-  cardBg: '#ffffff',
-  border: '#e0e0e0',
-  chartGrid: '#f0f0f0'
+  neutral: '#64748b',    // Slate Grey
+  grid: '#f1f5f9'        // Very light grey for grids
 };
 
 // Optimized chart defaults
@@ -140,18 +137,22 @@ const KPICard = memo(({ card }) => {
 
 KPICard.displayName = 'KPICard';
 
-// RBI Theme Chart Card Component
+// UPDATED: Taller Chart Card for better spacing
 const ChartCard = memo(({ title, children, info }) => (
-  <div className="bg-white rounded-lg border border-gray-200 shadow-sm p-5 h-[360px]">
-    <div className="flex items-center justify-between mb-4 border-b border-gray-100 pb-2">
-      <h3 className="text-sm font-bold text-blue-900 uppercase tracking-wide border-l-4 border-orange-400 pl-2">{title}</h3>
+  // Increased height from 360px to 420px
+  <div className="bg-white rounded-lg border border-gray-200 shadow-sm p-5 h-[420px] flex flex-col">
+    <div className="flex items-center justify-between mb-4 border-b border-gray-100 pb-3">
+      <h3 className="text-sm font-bold text-blue-900 uppercase tracking-wide border-l-4 border-orange-400 pl-3">
+        {title}
+      </h3>
       {info && (
         <button className="text-gray-400 hover:text-blue-700 transition-colors">
-          <FaInfoCircle size={14} />
+          <FaInfoCircle size={15} />
         </button>
       )}
     </div>
-    <div className="h-[280px]">
+    {/* Flex-grow ensures chart takes remaining space */}
+    <div className="flex-grow w-full relative">
       {children}
     </div>
   </div>
@@ -159,20 +160,33 @@ const ChartCard = memo(({ title, children, info }) => (
 
 ChartCard.displayName = 'ChartCard';
 
-// RBI Theme chart options
+// UPDATED: Chart Options for cleaner look
 const rbiChartOptions = {
   responsive: true,
   maintainAspectRatio: false,
   animation: false,
+  layout: {
+    padding: {
+      left: 10,
+      right: 10,
+      top: 10,
+      bottom: 10
+    }
+  },
   plugins: {
     legend: { 
       display: false,
-      labels: { color: '#374151', font: { size: 11, weight: '500' } }
+      labels: { 
+        color: '#374151', 
+        font: { size: 12, weight: '500' },
+        boxWidth: 12,
+        usePointStyle: true
+      }
     },
     tooltip: {
       mode: 'index',
       intersect: false,
-      backgroundColor: 'rgba(255, 255, 255, 0.95)',
+      backgroundColor: 'rgba(255, 255, 255, 0.98)',
       titleColor: '#003366',
       bodyColor: '#374151',
       borderColor: '#e5e7eb',
@@ -182,7 +196,12 @@ const rbiChartOptions = {
       titleFont: { size: 13, weight: 'bold' },
       bodyFont: { size: 12 },
       displayColors: true,
-      boxPadding: 4
+      boxPadding: 6,
+      callbacks: {
+        labelTextColor: function() {
+            return '#374151';
+        }
+      }
     }
   },
   scales: {
@@ -191,29 +210,29 @@ const rbiChartOptions = {
         display: false,
       },
       ticks: { 
-        maxTicksLimit: 8,
+        maxTicksLimit: 7, // Limit ticks to prevent squeezing
         font: { size: 11 },
-        color: '#6b7280'
+        color: '#64748b'
       },
-      border: { display: true, color: '#e5e7eb' }
+      border: { display: true, color: '#cbd5e1' }
     },
     y: {
       grid: { 
-        color: '#f3f4f6',
+        color: '#f1f5f9',
         drawBorder: false
       },
       ticks: { 
         maxTicksLimit: 6,
         font: { size: 11 },
-        color: '#6b7280',
-        padding: 8
+        color: '#64748b',
+        padding: 10
       },
       border: { display: false }
     }
   },
   elements: {
-    point: { radius: 2, hoverRadius: 5, backgroundColor: '#fff', borderWidth: 2 },
-    line: { borderWidth: 2.5, tension: 0.3 }
+    point: { radius: 3, hoverRadius: 6, backgroundColor: '#fff', borderWidth: 2 },
+    line: { borderWidth: 3, tension: 0.4 } // Smoother curves
   }
 };
 
@@ -268,7 +287,6 @@ const Dashboard = () => {
     setLoading(true);
     setChartsLoaded(false);
     try {
-      // Simulation of API delay if needed, or direct call
       const params = {
         start_date: filters.startDate.toISOString(),
         end_date: filters.endDate.toISOString(),
@@ -483,10 +501,11 @@ const Dashboard = () => {
     ];
   }, [kpis]);
 
-  // Chart data with RBI Theme Colors
+  // Chart data with refined colors
   const chartData = useMemo(() => {
     if (!trends) return null;
     
+    // Reduce data points for clearer charts if too many
     const maxPoints = 12;
     const step = Math.ceil(trends.labels.length / maxPoints);
     const limitedLabels = trends.labels.filter((_, i) => i % step === 0);
@@ -497,10 +516,12 @@ const Dashboard = () => {
         datasets: [{
           label: 'NPA Ratio (%)',
           data: trends.npa_climate.filter((_, i) => i % step === 0),
-          borderColor: '#C0392B', // Dark Red
-          backgroundColor: 'rgba(192, 57, 43, 0.1)',
+          borderColor: '#2b62c0ff', // Dark Red
+          backgroundColor: 'rgba(137, 235, 233, 0.15)', // Lighter fill
           fill: true,
-          tension: 0.3
+          tension: 0.3,
+          pointBorderColor: '#2b7ac0ff',
+          pointBackgroundColor: '#fff',
         }]
       },
       greenFinanceChart: {
@@ -509,16 +530,16 @@ const Dashboard = () => {
           {
             label: 'Green Finance (%)',
             data: trends.green_finance.filter((_, i) => i % step === 0),
-            borderColor: '#27AE60', // Green
-            backgroundColor: 'rgba(39, 174, 96, 0.1)',
+            borderColor: '#032c14ff', // Green
+            backgroundColor: 'rgba(148, 255, 203, 0.96)',
             fill: true,
             tension: 0.3
           },
           {
             label: 'Fossil Finance (%)',
             data: trends.fossil_finance.filter((_, i) => i % step === 0),
-            borderColor: '#E67E22', // Orange/Brown
-            backgroundColor: 'rgba(230, 126, 34, 0.1)',
+            borderColor: '#0d0dbcff', // Orange
+            backgroundColor: 'rgba(218, 241, 245, 1)',
             fill: true,
             tension: 0.3
           }
@@ -532,6 +553,8 @@ const Dashboard = () => {
           backgroundColor: RBI_COLORS.primary, // RBI Navy
           borderRadius: 4,
           hoverBackgroundColor: '#002244',
+          barPercentage: 0.6, // Makes bars thinner/cleaner
+          categoryPercentage: 0.8
         }]
       },
       riskIndexChart: {
@@ -540,7 +563,7 @@ const Dashboard = () => {
           label: 'Risk Index',
           data: trends.climate_risk_index.filter((_, i) => i % step === 0),
           borderColor: RBI_COLORS.primary, // RBI Navy
-          backgroundColor: 'rgba(0, 51, 102, 0.1)',
+          backgroundColor: 'rgba(0, 51, 102, 0.15)',
           fill: true,
           tension: 0.3
         }]
@@ -550,14 +573,15 @@ const Dashboard = () => {
         datasets: [{
           data: [18.6, 21.6, 18.6, 17.4, 23.8],
           backgroundColor: [
-            '#C0392B', // Critical (Dark Red)
+            '#C0392B', // Critical (Red)
             '#E67E22', // High (Orange)
             '#F1C40F', // Medium (Yellow)
             '#27AE60', // Low (Green)
             '#2980B9', // Very Low (Blue)
           ],
           borderColor: '#ffffff',
-          borderWidth: 2,
+          borderWidth: 3,
+          hoverOffset: 4
         }]
       }
     };
@@ -610,7 +634,7 @@ const Dashboard = () => {
           </div>
         </div>
 
-        {/* Filters Bar - Fixed Z-Index Issue here */}
+        {/* Filters Bar */}
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-5 mb-8">
           <h2 className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-4">Data Filters</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-5">
@@ -638,7 +662,7 @@ const Dashboard = () => {
               </select>
             </div>
             
-            {/* Start Date - Z-INDEX FIX APPLIED */}
+            {/* Start Date */}
             <div className="relative z-50">
               <label className="block text-xs font-semibold text-gray-700 mb-1">Start Date</label>
               <DatePicker
@@ -651,7 +675,7 @@ const Dashboard = () => {
               />
             </div>
             
-            {/* End Date - Z-INDEX FIX APPLIED */}
+            {/* End Date */}
             <div className="relative z-50">
               <label className="block text-xs font-semibold text-gray-700 mb-1">End Date</label>
               <DatePicker
@@ -665,7 +689,7 @@ const Dashboard = () => {
               />
             </div>
 
-            {/* Date Presets - spanning 2 columns */}
+            {/* Date Presets */}
             <div className="lg:col-span-2">
               <label className="block text-xs font-semibold text-gray-700 mb-1">Quick Range</label>
               <div className="grid grid-cols-4 gap-2">
@@ -690,7 +714,7 @@ const Dashboard = () => {
           </div>
         </div>
 
-        {/* KPI Cards by Category - At Top */}
+        {/* KPI Cards */}
         {categories.map(category => {
           const categoryCards = kpiCards.filter(card => card.category === category);
           if (categoryCards.length === 0) return null;
@@ -711,7 +735,7 @@ const Dashboard = () => {
           );
         })}
 
-        {/* Charts Section - At Bottom */}
+        {/* Charts Section */}
         {chartsLoaded && chartData && (
           <div className="space-y-6 mt-8">
             <h2 className="text-xl font-bold text-blue-900 uppercase tracking-wide flex items-center gap-2 border-b border-gray-300 pb-2">
@@ -719,8 +743,8 @@ const Dashboard = () => {
               Analytics & Trends
             </h2>
 
-            {/* Top Charts Row */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {/* Top Charts Row - Adjusted to 2 cols on Large screens for width */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
               {/* NPA Trend Chart */}
               <ChartCard title="Climate-Linked NPA Trend" info>
                 <Line data={chartData.npaChart} options={rbiChartOptions} />
@@ -739,8 +763,8 @@ const Dashboard = () => {
                         position: 'top',
                         align: 'end',
                         labels: { 
-                          boxWidth: 10, 
-                          font: { size: 10 },
+                          boxWidth: 12, 
+                          font: { size: 11 },
                           color: '#4b5563',
                           padding: 10
                         }
@@ -750,24 +774,25 @@ const Dashboard = () => {
                 />
               </ChartCard>
 
-              {/* Risk Distribution Doughnut */}
+              {/* Risk Distribution Doughnut - Improved sizing */}
               <ChartCard title="Risk Level Distribution" info>
-                <div className="flex h-full items-center justify-center">
+                <div className="flex h-full items-center justify-center p-2">
                   <Doughnut 
                     data={chartData.riskDistribution}
                     options={{
                       ...rbiChartOptions,
-                      cutout: '65%',
+                      cutout: '55%', // Thickened ring (was 65%)
+                      layout: { padding: 0 },
                       plugins: {
                         ...rbiChartOptions.plugins,
                         legend: {
                           display: true,
                           position: 'right',
                           labels: {
-                            boxWidth: 10,
-                            font: { size: 10 },
+                            boxWidth: 12,
+                            font: { size: 11 },
                             color: '#4b5563',
-                            padding: 10
+                            padding: 12
                           }
                         }
                       }
@@ -777,8 +802,8 @@ const Dashboard = () => {
               </ChartCard>
             </div>
 
-            {/* Bottom Charts Row */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* Bottom Charts Row - Stays 2 col */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               {/* Emissions Bar Chart */}
               <ChartCard title="Total Emissions (tCO2e)" info>
                 <Bar data={chartData.emissionsChart} options={rbiChartOptions} />
@@ -792,7 +817,7 @@ const Dashboard = () => {
           </div>
         )}
         
-        {/* Loading indicator for charts */}
+        {/* Loading indicator */}
         {!chartsLoaded && kpis && (
           <div className="bg-white border border-gray-200 rounded-lg p-10 text-center mt-6 shadow-sm">
             <div className="w-8 h-8 border-4 border-blue-900 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
@@ -800,7 +825,7 @@ const Dashboard = () => {
           </div>
         )}
         
-        {/* Footer Info */}
+        {/* Footer */}
         <div className="mt-8 pt-6 border-t border-gray-300 text-center">
           <p className="text-gray-500 text-xs">
             Data refreshed: {new Date().toLocaleString('en-IN')} | 
